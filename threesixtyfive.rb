@@ -41,11 +41,16 @@ get "/work" do
     return '<a href="/work/connect">Connect with Instagram</a>'
   end
 
-  '<h1>Work!</h1><a href="/work/check">Check now</a>'
+  "<h1>Work!</h1><a href='/work/check'>Check now</a> (#{Photo.count} photos)"
 end
 
 get "/work/db" do
   send_file File.join(settings.public_folder, 'threesixtyfive.db')
+end
+
+get "/work/db/delete" do
+  Photo.truncate
+  redirect "/work"
 end
 
 get "/work/check" do
@@ -65,7 +70,7 @@ end
 get "/work/callback" do
   response = Instagram.get_access_token(params[:code], :redirect_uri => "#{request.base_url}/work/callback")
   session[:access_token] = response.access_token
-  redirect "/"
+  redirect "/work"
 end
 
 def check(year)
