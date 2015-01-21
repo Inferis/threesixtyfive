@@ -29,8 +29,8 @@ config_file 'threesixtyfive.yaml'
 CALLBACK_URL = "http://localhost:4567/work/callback"
 
 Instagram.configure do |config|
-  config.client_id = settings.instagram[:client_id]
-  config.client_secret = settings.instagram[:client_secret]
+  config.client_id = ENV["THREESIXTYFIVE_CLIENT_ID"] || settings.instagram[:client_id]
+  config.client_secret = ENV["THREESIXTYFIVE_CLIENT_SECRET"] || settings.instagram[:client_secret]
 end
 
 get "/" do
