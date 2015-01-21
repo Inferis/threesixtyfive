@@ -5,3 +5,7 @@ gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'instagram'
 gem 'sequel'
+
+group :production do
+  gem 'pg'
+end
