@@ -47,6 +47,10 @@ get "/work" do
   '<h1>Work!</h1><a href="/work/check">Check now</a>'
 end
 
+get "/work/db" do
+  send_file File.join(settings.public_folder, 'threesixtyfive.db')
+end
+
 get "/work/check" do
   now = Date.today
   year = now.year
