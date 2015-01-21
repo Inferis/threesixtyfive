@@ -2,12 +2,12 @@
 
 require 'sinatra'
 require "sinatra/reloader" if development?
+require "sinatra/config_file"
 require 'instagram'
 require 'date'
 require 'sequel'
 
 $db = Sequel.connect(ENV['DATABASE_URL'] || 'sqlite://threesixtyfive.db')
-
 $db.create_table? :photos do
   primary_key :id
   Int :year
@@ -24,14 +24,13 @@ class Photo < Sequel::Model
 end
 
 enable :sessions
+config_file 'threesixtyfive.yaml'
 
 CALLBACK_URL = "http://localhost:4567/work/callback"
 
 Instagram.configure do |config|
-  config.client_id = "ID"
-  config.client_secret = "SECRET"
-  # For secured endpoints only
-  #config.client_ips = '<Comma separated list of IPs>'
+  config.client_id = settings.instagram[:client_id]
+  config.client_secret = settings.instagram[:client_secret]
 end
 
 get "/" do
