@@ -26,8 +26,6 @@ end
 enable :sessions
 config_file 'threesixtyfive.yaml'
 
-CALLBACK_URL = "http://localhost:4567/work/callback"
-
 Instagram.configure do |config|
   config.client_id = ENV["THREESIXTYFIVE_CLIENT_ID"] || settings.instagram[:client_id]
   config.client_secret = ENV["THREESIXTYFIVE_CLIENT_SECRET"] || settings.instagram[:client_secret]
@@ -61,11 +59,11 @@ get "/work/check/:year" do |year|
 end
 
 get "/work/connect" do
-  redirect Instagram.authorize_url(:redirect_uri => CALLBACK_URL)
+  redirect Instagram.authorize_url(:redirect_uri => "#{request.base_url}/work/callback")
 end
 
 get "/work/callback" do
-  response = Instagram.get_access_token(params[:code], :redirect_uri => CALLBACK_URL)
+  response = Instagram.get_access_token(params[:code], :redirect_uri => "#{request.base_url}/work/callback")
   session[:access_token] = response.access_token
   redirect "/"
 end
