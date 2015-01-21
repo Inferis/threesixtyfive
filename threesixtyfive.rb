@@ -78,7 +78,7 @@ def check(year)
 
   tomorrow = DateTime.now.next_day.beginning_of_day
   puts tomorrow
-  beginning_of_year = DateTime.new(year, 1, 1, 0, 0, 0, Time.now.getlocal.zone)
+  beginning_of_year = DateTime.new(year, 1, 1, 0, 0, 0, '+1')
   last_photo = Photo.reverse_order(:id).first
 
   if last_photo.nil?
