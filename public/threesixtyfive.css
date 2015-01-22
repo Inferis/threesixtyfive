@@ -81,7 +81,7 @@ img {
   width: 100%;
 }
 
-@media (max-width: 640px) {
+@media (max-device-width: 640px) {
   body {
     background: #eee;
   }
