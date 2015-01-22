@@ -1,0 +1,114 @@
+body {
+  background: white;
+  margin: 0;
+  font-family: helvetica;
+  text-align: center;
+}
+
+#centerfold {
+  color: #666;
+  background: #eee;
+  margin: 0 auto;
+  max-width: 700px;
+  border-left: 1px solid #ddd;
+  border-right: 1px solid #ddd;
+  padding: 30px 0 100px 0;
+  text-align: left;
+}
+
+a {
+  color: black;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+h1 {
+  padding: 30px 30px 0 30px;
+  margin: 0;
+  color: #666;
+}
+
+h1 span {
+  color: #aaa;
+  font-weight: normal;
+}
+
+p {
+  padding: 30px 30px 0 30px;
+  margin: 0;
+}
+
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+li {
+  padding: 0;
+  margin: 100px 30px 0 30px;
+  position: relative;
+}
+
+li div {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  color: white;
+  text-shadow: 0px 0px 10px #333;
+}
+
+li div span.index {
+  position: absolute;
+  right: 0;
+  bottom: 10px;
+  font-size: 80pt;
+  opacity: 0.7;
+}
+
+li div span.date {
+  position: absolute;
+  font-size: 18pt;
+  right: 8px;
+  bottom: 0;
+  font-weight: bold;
+  opacity: 0.4;
+}
+
+img {
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  body {
+    background: #eee;
+  }
+
+  #centerfold {
+    margin: 0;
+    width: 100%;
+    border-left: none;
+    border-right: none;
+  }
+
+  h1 {
+    text-align: right;
+  }
+
+  h1 span {
+      display: block;
+      text-align: left;
+  }
+
+  li {
+    margin: 30px 0 0 0;
+  }
+
+  img {
+    border-left: none;
+    border-right: none;
+    border-radius: 0;
+  }
+}
