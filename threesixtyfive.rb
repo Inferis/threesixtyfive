@@ -44,10 +44,6 @@ get "/work" do
   "<h1>Work!</h1><a href='/work/check'>Check now</a> (#{Photo.count} photos)"
 end
 
-get "/work/db" do
-  send_file File.join(settings.public_folder, 'threesixtyfive.db')
-end
-
 get "/work/db/delete" do
   Photo.truncate
   redirect "/work"
