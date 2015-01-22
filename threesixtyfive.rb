@@ -31,12 +31,28 @@ Instagram.configure do |config|
   config.client_secret = ENV["THREESIXTYFIVE_CLIENT_SECRET"] || settings.instagram[:client_secret]
 end
 
+helpers do
+  def protected!
+    return if authorized?
+    headers['WWW-Authenticate'] = 'Basic realm="Restricted Area"'
+    halt 401, "Not authorized\n"
+  end
+
+  def authorized?
+    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
+    password = ENV["THREESIXTYFIVE_ADMIN_PASSWORD"] || settings.admin[:password]
+    @auth.provided? and @auth.basic? and @auth.credentials and @auth.credentials == ['admin', password]
+  end
+end
+
 get "/" do
   @photos = Photo.reverse_order(:created_at).all
   erb :index
 end
 
 get "/work" do
+  protected!
+
   unless session[:access_token]
     return '<a href="/work/connect">Connect with Instagram</a>'
   end
@@ -45,25 +61,30 @@ get "/work" do
 end
 
 get "/work/db/truncate" do
+  protected!
   Photo.truncate
   redirect "/work"
 end
 
 get "/work/check" do
+  protected!
   now = Date.today
   year = now.year
   check year
 end
 
 get "/work/check/:year" do |year|
+  protected!
   check year.to_i
 end
 
 get "/work/connect" do
+  protected!
   redirect Instagram.authorize_url(:redirect_uri => "#{request.base_url}/work/callback")
 end
 
 get "/work/callback" do
+  protected!
   response = Instagram.get_access_token(params[:code], :redirect_uri => "#{request.base_url}/work/callback")
   session[:access_token] = response.access_token
   redirect "/work"
@@ -91,14 +112,15 @@ def check(year)
         photo = photo_from_media_item(media_item)
         photo.save
 
-        result = "Saved the first photo: <img src='#{photo.photo_url}'>\n"
+        result = "Saved the first photo: <img src='#{photo.thumb_url}'>\n"
         break
       end
       first_day = first_day.next_day
     end
   else
     min_id = last_photo.instagram_id
-    result = "Completing since #{min_id}"
+    result = "<p>Completing since <b>#{min_id}</b>...</p>\n"
+    found = false
 
     all_media = at_least(client, 365, { :min_id => min_id })
     all_media.select! { |m| t = date_time(m.created_time); t > last_photo.created_at.to_datetime && t < tomorrow }
@@ -110,14 +132,16 @@ def check(year)
         media_item = select_best_photo(media)
         photo = photo_from_media_item(media_item)
         photo.save
+        found = true
 
-        result << "Saved a photo: <img src='#{photo.photo_url}'><br>\n"
+        result << "<li>Saved a photo: <img src='#{photo.thumb_url}'></li>\n"
       end
       last_day = last_day.next_day
     end
   end
 
-  result
+  result << "<li>Nothing new found.</li>\n" unless found
+  "<html><body><H1>Check</h1>#{result}</body></html>"
 end
 
 def date_time(time)

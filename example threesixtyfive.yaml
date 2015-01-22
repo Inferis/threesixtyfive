@@ -1,3 +1,5 @@
 instagram:
   client_id: YOUR_INSTAGRAM_CLIENT_ID
   client_secret: YOUR_INSTAGRAM_CLIENT_SECRET
+admin:
+  password: admin
