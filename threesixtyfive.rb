@@ -107,7 +107,7 @@ def check(year)
     all_media = at_least(client, 365, { :min_id => min_id })
     all_media.select! { |m| t = date_time(m.created_time); t > last_photo.created_at.to_datetime && t < tomorrow }
 
-    last_day = last_photo.created_at.to_datetime.next_day.beginning_of_day
+    last_day = last_photo.created_at.next_day.beginning_of_day
     while last_day < tomorrow && all_media.any? { |m| date_time(m.created_time).yday <= last_day.yday }
       media = all_media.select { |m| date_time(m.created_time).yday == last_day.yday }
       if media.count > 0
@@ -160,7 +160,7 @@ def photo_from_media_item(media_item)
   photo.photo_url = media_item.images.standard_resolution.url
   photo.link_url = media_item.link
   photo.registered_at = DateTime.now
-  photo.created_at = Time.at(media_item.created_time.to_i).to_datetime
+  photo.created_at = date_time(media_item.created_time)
   photo.year = photo.created_at.year
   photo.year_index = photo.created_at.yday
   return photo
