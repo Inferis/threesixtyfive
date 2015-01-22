@@ -26,6 +26,7 @@ h1 {
   padding: 30px 30px 0 30px;
   margin: 0;
   color: #666;
+  font-size: 28pt;
 }
 
 h1 span {
@@ -81,7 +82,8 @@ img {
   width: 100%;
 }
 
-@media (max-device-width: 320px), (max-width: 700px) {
+/*@media screen and ((max-device-width: 640px), (max-width: 700px)) {*/
+@media (max-width: 700px) {
   body {
     background: #eee;
   }
@@ -95,6 +97,11 @@ img {
 
   h1 {
     text-align: right;
+    font-size: 20pt;
+  }
+
+  p {
+    font-size: 10pt;
   }
 
   h1 span {
@@ -111,5 +118,35 @@ img {
     border-right: none;
     border-radius: 0;
     width: 100%;
+  }
+}
+
+@media (max-width: 420px) {
+  h1 {
+    font-size: 16pt;
+  }
+
+  li div span.index {
+    font-size: 53pt;
+  }
+
+  li div span.date {
+    font-size: 13pt;
+  }
+}
+
+@media (max-width: 320px) {
+  li div span.index {
+    font-size: 43pt;
+  }
+
+  li div span.date {
+    font-size: 10pt;
+    right: 5px;
+  }
+
+  li div {
+    bottom: 13px;
+    right: 13px;
   }
 }
