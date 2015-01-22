@@ -44,7 +44,7 @@ get "/work" do
   "<h1>Work!</h1><a href='/work/check'>Check now</a> (#{Photo.count} photos)"
 end
 
-get "/work/db/delete" do
+get "/work/db/truncate" do
   Photo.truncate
   redirect "/work"
 end
