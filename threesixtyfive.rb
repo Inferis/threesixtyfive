@@ -88,11 +88,8 @@ def check(year)
     all_media.sort { |a, b| a.created_time.to_i <=> b.created_time.to_i }.select! { |m| t = Time.at(m.created_time.to_i).to_datetime; t >= beginning_of_year && t < tomorrow }
 
     first_day = beginning_of_year
-    puts first_day.yday
-    puts all_media.map { |m| Time.at(m.created_time.to_i).to_datetime.yday }
-    while all_media.any? { |m| "#{Time.at(m.created_time.to_i).to_datetime.yday <= first_day.yday} => #{Time.at(m.created_time.to_i).to_datetime}" }
-      media = all_media.select { |m| Time.at(m.created_time.to_i).to_datetime.yday == first_day.yday }
-      puts media
+    while all_media.any? { |m| date_time(m.created_time).yday <= first_day.yday }
+      media = all_media.select { |m| date_time(m.created_time).yday == first_day.yday }
       if media.count > 0
         media_item = select_best_photo(media)
         photo = photo_from_media_item(media_item)
@@ -108,11 +105,11 @@ def check(year)
     result = "Completing since #{min_id}"
 
     all_media = at_least(client, 365, { :min_id => min_id })
-    all_media.select! { |m| t = Time.at(m.created_time.to_i).to_datetime; t > last_photo.created_at.to_datetime && t < tomorrow }
+    all_media.select! { |m| t = date_time(m.created_time); t > last_photo.created_at.to_datetime && t < tomorrow }
 
     last_day = last_photo.created_at.to_datetime.next_day.beginning_of_day
-    while last_day < tomorrow && all_media.any? { |m| Time.at(m.created_time.to_i).to_datetime.yday <= last_day.yday }
-      media = all_media.select { |m| Time.at(m.created_time.to_i).to_datetime.yday == last_day.yday }
+    while last_day < tomorrow && all_media.any? { |m| date_time(m.created_time).yday <= last_day.yday }
+      media = all_media.select { |m| date_time(m.created_time).yday == last_day.yday }
       if media.count > 0
         media_item = select_best_photo(media)
         photo = photo_from_media_item(media_item)
@@ -125,6 +122,13 @@ def check(year)
   end
 
   result
+end
+
+def date_time(time)
+  x = 1
+  offset = (x * 3600) - Time.now.utc_offset
+  puts offset
+  Time.at(time.to_i + offset).to_datetime
 end
 
 def at_least(client, num, options = {})
