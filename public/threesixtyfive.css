@@ -81,7 +81,7 @@ img {
   width: 100%;
 }
 
-@media (max-device-width: 640px) {
+@media (max-device-width: 320px), (max-width: 700px) {
   body {
     background: #eee;
   }
@@ -110,5 +110,6 @@ img {
     border-left: none;
     border-right: none;
     border-radius: 0;
+    width: 100%;
   }
 }
